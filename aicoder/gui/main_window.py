@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.tray = None  # wird von app.py gesetzt
-        self.setWindowTitle("ai-coder")
+        self.setWindowTitle("ai-coder-kimi")
         self.setMinimumSize(QSize(720, 540))
         self.resize(940, 720)
 
@@ -33,9 +33,9 @@ class MainWindow(QMainWindow):
         top_layout.setContentsMargins(14, 8, 14, 8)
         mark = QLabel(">_")
         mark.setObjectName("BrandMark")
-        brand = QLabel("ai-coder")
+        brand = QLabel("ai-coder-kimi")
         brand.setObjectName("Brand")
-        caption = QLabel("AILinux coding agent")
+        caption = QLabel("AILinux coding agent · Kimi K3")
         caption.setObjectName("Caption")
         shortcut_hint = QLabel("Ctrl+1 Chat   Ctrl+2 Settings   Ctrl+K Prompt")
         shortcut_hint.setObjectName("Caption")
@@ -69,7 +69,7 @@ class MainWindow(QMainWindow):
         if self.tray and self.tray.isVisible():
             self.hide()
             self.tray.showMessage(
-                "ai-coder",
+                "ai-coder-kimi",
                 "Minimiert in die Taskleiste. Klick zum Oeffnen.",
                 self.tray.MessageIcon.Information,
                 2000,

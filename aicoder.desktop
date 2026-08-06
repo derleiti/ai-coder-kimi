@@ -1,12 +1,12 @@
 [Desktop Entry]
 Comment[de_DE]=
 Comment=
-Exec="/bin/python" "/home/zombie/ai-coder/aicoder_main.py" "gui"
+Exec="/bin/python" "/home/zombie/ai-coder-kimi/aicoder_main.py" "gui"
 GenericName[de_DE]=
 GenericName=
 MimeType=
-Name[de_DE]=AI-Coder
-Name=AI-Coder
+Name[de_DE]=AI-Coder-Kimi
+Name=AI-Coder-Kimi
 Path=
 StartupNotify=true
 Terminal=false

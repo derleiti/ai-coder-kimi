@@ -5,11 +5,11 @@ import sys
 import platform
 from pathlib import Path
 
-APP_NAME = "ai-coder"
+APP_NAME = "ai-coder-kimi"
 DESKTOP_ENTRY = """[Desktop Entry]
 Type=Application
-Name=ai-coder
-Comment=Terminal Coding & DevOps Agent
+Name=ai-coder-kimi
+Comment=Terminal Coding & DevOps Agent (Kimi K3)
 Exec={exec_path} gui
 Icon=utilities-terminal
 Terminal=false
@@ -19,11 +19,11 @@ X-GNOME-Autostart-enabled=true
 """
 
 def _linux_autostart_path() -> Path:
-    return Path.home() / ".config" / "autostart" / "ai-coder.desktop"
+    return Path.home() / ".config" / "autostart" / "ai-coder-kimi.desktop"
 
 def _linux_exec_path() -> str:
     # Prefer system binary, fallback to current executable
-    for p in ["/usr/bin/aicoder", "/usr/local/bin/aicoder"]:
+    for p in ["/usr/bin/aicoder-kimi", "/usr/local/bin/aicoder-kimi"]:
         if os.path.isfile(p):
             return p
     return sys.executable + " -m aicoder.cli"

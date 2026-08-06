@@ -705,21 +705,21 @@ def cmd_service(args: argparse.Namespace) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="aicoder",
-        description="ai-coder — terminal-based coding agent for AILinux / TriForce",
+        prog="aicoder-kimi",
+        description="ai-coder-kimi — terminal-based coding agent for AILinux / TriForce, pinned to Kimi K3",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""        Examples:
-          aicoder login --base-url http://127.0.0.1:9000
-          aicoder model anthropic/claude-sonnet-4
-          aicoder fallback gemini/gemini-2.0-flash
-          aicoder swarm auto
-          aicoder status
-          aicoder ask "Was macht diese Funktion?"
-          aicoder task "Add docstrings" -f datei.py --dry-run
-          aicoder review -f datei.py
-          aicoder models --filter groq
-          aicoder mcp-list
-          aicoder hist
+          aicoder-kimi login --base-url http://127.0.0.1:9000
+          aicoder-kimi status
+          aicoder-kimi ask "Was macht diese Funktion?"
+          aicoder-kimi task "Add docstrings" -f datei.py --dry-run
+          aicoder-kimi review -f datei.py
+          aicoder-kimi models --filter kimi
+          aicoder-kimi mcp-list
+          aicoder-kimi hist
+
+        Modell ist auf Kimi K3 (Moonshot AI) fest verdrahtet — siehe aicoder/kimi.py.
+        Override: aicoder-kimi model <id>  oder  AICODER_KIMI_MODEL=<id>
         """),
     )
     sub = parser.add_subparsers(dest="command", required=True)

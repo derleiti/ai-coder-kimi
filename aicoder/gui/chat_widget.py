@@ -135,7 +135,7 @@ class _AgentWorker(QThread):
                 self.msg.emit("error", f"Tool-Loading: {e}", "")
                 self.tools = []
                 self.system = (
-                    "Du bist ai-coder, autonomer Coding- und DevOps-Agent auf AILinux/TriForce (api.ailinux.me). "
+                    "Du bist ai-coder-kimi, autonomer Coding- und DevOps-Agent auf AILinux/TriForce (api.ailinux.me), fest auf Kimi K3 (Moonshot AI) verdrahtet. "
                     "INIT: current_time pruefen, memory_search, dann handeln. "
                     "Lesen vor Schreiben. Diagnose vor Patch. Kleinste Aenderung zuerst. Sprache: Deutsch."
                 )
@@ -492,7 +492,7 @@ class ChatWidget(QWidget):
         # Input-Zeile
         input_row = QHBoxLayout()
         self.input = PromptEdit()
-        self.input.setPlaceholderText("Ask ai-coder…  Enter sends · Shift/Alt+Enter adds a line")
+        self.input.setPlaceholderText("Ask ai-coder-kimi…  Enter sends · Shift/Alt+Enter adds a line")
         self.input.setFixedHeight(68)
         self.input.submitted.connect(self._send)
         input_row.addWidget(self.input, stretch=1)

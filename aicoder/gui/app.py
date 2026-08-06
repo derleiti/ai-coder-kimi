@@ -40,7 +40,7 @@ def _make_icon() -> QIcon:
 
 def run_gui() -> int:
     app = QApplication(sys.argv)
-    app.setApplicationName("ai-coder")
+    app.setApplicationName("ai-coder-kimi")
     app.setOrganizationName("AILinux")
     app.setQuitOnLastWindowClosed(False)
 
@@ -75,7 +75,7 @@ def run_gui() -> int:
         new_state = toggle_autostart()
         autostart_action.setChecked(new_state)
         tray.showMessage(
-            "ai-coder",
+            "ai-coder-kimi",
             "Autostart aktiviert" if new_state else "Autostart deaktiviert",
             tray.MessageIcon.Information, 2000,
         )
@@ -95,7 +95,7 @@ def run_gui() -> int:
         if reason == QSystemTrayIcon.ActivationReason.Trigger
         else None
     ))
-    tray.setToolTip("ai-coder — Terminal Coding & DevOps Agent")
+    tray.setToolTip("ai-coder-kimi — Terminal Coding & DevOps Agent (Kimi K3)")
     tray.show()
 
     window.tray = tray

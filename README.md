@@ -1,110 +1,91 @@
-# ai-coder
+# ai-coder-kimi
+
+**Fork von [ai-coder](https://github.com/derleiti/ai-coder), fest auf [Kimi K3](https://platform.kimi.ai/docs/guide/kimi-k3-quickstart) (Moonshot AI) verdrahtet.**
 
 Terminalbasierter Coding & DevOps Agent für AILinux / TriForce.
 
-**Prinzip:** Dünner lokaler CLI-Client — Intelligenz sitzt im Backend.
+**Prinzip:** Dünner lokaler CLI-Client — Intelligenz sitzt im Backend. Anders
+als das Original wählt dieser Fork das Modell nicht mehr frei aus 625+
+Backend-Modellen, sondern verdrahtet Operator- und Fallback-Modell fest auf
+Kimi K3.
 
-## Download
+## Was ist anders als im Original?
 
-| Plattform | Download | Hinweis |
+| | ai-coder (Original) | ai-coder-kimi (dieser Fork) |
 |---|---|---|
-| **Windows** | [aicoder.exe](https://github.com/derleiti/ai-coder/releases/latest/download/aicoder.exe) | Standalone, 13 MB, PowerShell-ready |
-| **Linux (Binary)** | [aicoder-x86_64-linux](https://github.com/derleiti/ai-coder/releases/latest/download/aicoder-x86_64-linux) | Standalone inkl. GUI |
-| **Debian/Ubuntu** | [aicoder_amd64.deb](https://github.com/derleiti/ai-coder/releases/latest/download/aicoder_amd64.deb) | `sudo dpkg -i aicoder_*.deb` |
-| **Arch / AILinux** | `yay -S aicoder` | AUR-Paket |
-| **Android / Termux** | [Release-Artefakte](https://github.com/derleiti/ai-coder/releases/latest) | Versionierter Installer + Quell-Bundle |
-| **pip** | `pip install -e .` | Aus Quellcode |
+| Modellwahl | Interaktiver Picker, 625+ Modelle | Fest auf Kimi K3, auto-erkannt aus dem Backend-Katalog |
+| Fallback | frei wählbar (Default: `ollama/llama3.2:latest`) | kein Fremd-Modell mehr (Default: leer) |
+| Config-Verzeichnis | `~/.config/ai-coder/` | `~/.config/ai-coder-kimi/` (kollidiert nicht mit dem Original) |
+| CLI-Befehl | `aicoder` | `aicoder-kimi` |
+| Transport | TriForce-Backend (`api.ailinux.me`) | unverändert — TriForce-Backend |
 
-### Windows-Installation
+Login, Auth, MCP-Tools, Swarm-Mechanik, GUI und alle Befehle sind
+unverändert aus dem Original übernommen. Geändert wurde ausschließlich,
+**welches Modell** angefragt wird — siehe [`aicoder/kimi.py`](aicoder/kimi.py).
 
-```powershell
-# Option 1: Binary direkt nutzen
-# aicoder.exe runterladen, in einen Ordner legen (z.B. C:\Tools)
-# Ordner zu PATH hinzufügen (System → Umgebungsvariablen → Path → Bearbeiten)
+## Wie die Kimi-K3-Bindung funktioniert
 
-# Option 2: NSIS-Installer
-# aicoder-{version}-setup.exe runterladen und ausführen
-# Installiert nach C:\Program Files\aicoder, fügt automatisch zu PATH hinzu
-```
+Das TriForce-Backend routet Modelle unter unterschiedlichen Provider-Präfixen
+(z.B. `groq/moonshotai/kimi-k2-instruct` für K2 via Groq). Welches Präfix für
+Kimi K3 gilt, hängt vom Live-Katalog des Backends ab. Deshalb sucht der
+Setup-Wizard beim ersten Start `/v1/client/models` nach einem Eintrag, der
+`kimi-k3` enthält, und übernimmt genau diese ID automatisch — kein manuelles
+Rätselraten nötig.
 
-### Linux-Installation
-
-```bash
-# Binary direkt
-sudo wget -O /usr/bin/aicoder https://github.com/derleiti/ai-coder/releases/latest/download/aicoder-x86_64-linux
-sudo chmod +x /usr/bin/aicoder
-
-# Oder über APT-Repo
-echo "deb https://repo.ailinux.me stable main" | sudo tee /etc/apt/sources.list.d/ailinux.list
-sudo apt update && sudo apt install aicoder
-```
-
-### Android-/Termux-Installation
+Falls das Backend K3 (noch) nicht listet, wird ersatzweise nach `kimi-k2`
+gesucht; schlägt auch das fehl, greift ein statischer Default
+(`moonshotai/kimi-k3`). Override jederzeit möglich:
 
 ```bash
-curl -sL https://ailinux.me/ai-coder-termux | bash
+aicoder-kimi model <exakte-id>          # dauerhaft in state.json
+AICODER_KIMI_MODEL=<exakte-id> aicoder-kimi   # einmalig per Env-Var
 ```
 
-Android verwendet wegen Bionic ein eigenes Termux-Quell-Bundle; das Linux-ELF
-ist dort nicht lauffähig. Versionierte Installer liegen in jedem GitHub Release.
+### Offizielle Kimi-K3-Referenz (Moonshot AI, Stand 2026-08)
+
+- Direkte Herstellerdoku: <https://platform.kimi.ai/docs/guide/kimi-k3-quickstart>
+- API-Referenz: <https://platform.kimi.ai/docs/api/chat>
+- Direkter Endpoint (falls jemand ohne TriForce direkt gegen Moonshot bauen will):
+  `POST https://api.moonshot.ai/v1/chat/completions`, `Authorization: Bearer $MOONSHOT_API_KEY`,
+  OpenAI-kompatibles Schema, Modell-ID `kimi-k3`, 1M Token Kontext,
+  `reasoning_effort` (`low`/`high`/`max`, Default `max`).
+
+## Installation
+
+```bash
+git clone <dieses-repo> ai-coder-kimi
+cd ai-coder-kimi
+pip install -e .
+aicoder-kimi            # Setup-Wizard (Login) + Agent-REPL, Modell auto-erkannt
+```
+
+Koexistenz mit dem Original ist bewusst möglich: eigener Config-Ordner
+(`~/.config/ai-coder-kimi/`), eigener Befehlsname (`aicoder-kimi`), eigener
+User-Agent-String gegenüber dem Backend.
 
 ## Schnellstart
 
 ```bash
-aicoder                        # Setup-Wizard + Agent-REPL
-aicoder login                  # Login gegen TriForce Backend
-aicoder model anthropic/claude-sonnet-4
-aicoder fallback gemini/gemini-2.0-flash
-aicoder swarm auto
-aicoder status
+aicoder-kimi                   # Setup-Wizard (nur Login) + Agent-REPL
+aicoder-kimi login             # Login gegen TriForce Backend
+aicoder-kimi status            # model, fallback, swarm, workspace
+aicoder-kimi ask "Was macht diese Funktion?"
+aicoder-kimi task "Add docstrings" -f datei.py --dry-run
 ```
 
 ## Commands
 
-| Command | Beschreibung |
-|---|---|
-| `login` | Login gegen /v1/auth/login |
-| `logout` | Lokale Session löschen |
-| `whoami` | Token verifizieren |
-| `model [value]` | Aktives Modell anzeigen / setzen |
-| `fallback [value]` | Fallback-Modell anzeigen / setzen |
-| `swarm [value]` | Swarm-Modus: off / auto / on / review |
-| `status` | Übersicht: model, fallback, swarm, workspace, docs |
-| `ask <prompt>` | Single-shot LLM mit AGENTS.md als System-Prompt |
-| `chat` | Interaktive Multi-Turn-Session |
-| `task <file>` | File lesen → LLM → Diff → optional apply |
-| `review <file>` | Strukturiertes Code-Review |
-| `agent <prompt>` | Autonomer Agent mit Tool-Loop |
-| `models [--filter]` | Verfügbare Modelle vom Backend |
-| `mcp <tool> [args]` | MCP-Tool-Call gegen /v1/mcp |
-| `workspace [path]` | Lokalen Repo-Snapshot erstellen |
-| `hist [-n N]` | Call-History anzeigen |
+Identisch zum Original — siehe [Original-README](https://github.com/derleiti/ai-coder#commands).
+`model`/`fallback` funktionieren weiterhin manuell, sind aber standardmäßig
+auf Kimi K3 vorbelegt statt leer.
 
 ## Architektur
 
-Siehe `docs/architecture.md`.
+Siehe `docs/architecture.md` (unverändert vom Original) sowie
+`aicoder/kimi.py` für die K3-spezifische Ergänzung.
 
-## CI/CD
+## Lizenz
 
-- **Linux:** PyInstaller-Binary + Debian-Paket
-- **Windows:** PyInstaller-Binary + verpflichtender NSIS-Installer
-- **Android/Termux:** validierter Installer + reproduzierbares Quell-Bundle
-- **Trigger:** manueller Dry-Run per `workflow_dispatch`; Release per Tag `v*`
-
-## Links
-
-- **Website:** https://ailinux.me/ai-coder/
-- **Downloads:** https://ailinux.me/downloads/
-- **API-Docs:** https://api.ailinux.me
-- **Forum:** https://forum.ailinux.me
-- **Beta-Code:** `AILINUX2026` (kostenloser Pro-Zugang)
-
-## License
-
-**ai-coder is licensed under the MIT License.**
-
-You are free to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of this software with attribution.
-
-Copyright (c) 2026 Markus Leitermann / AILinuX <support@ailinux.me>
-See [LICENSE](./LICENSE) for the full text.
+Wie das Original: MIT License. Fork erstellt am 2026-08-06.
+Original Copyright (c) 2026 Markus Leitermann / AILinuX <support@ailinux.me>.
+Siehe [LICENSE](./LICENSE).

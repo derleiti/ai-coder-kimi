@@ -10,7 +10,7 @@ from urllib.parse import urljoin
 from urllib.request import Request, urlopen
 
 from . import __version__
-USER_AGENT = f"ai-coder/{__version__} (AILinux Coding Client)"
+USER_AGENT = f"ai-coder-kimi/{__version__} (AILinux Coding Client · Kimi K3)"
 
 # ── Force IPv4 (IPv6 broken on Hetzner/CF, causes 30-60s hangs) ──
 import socket

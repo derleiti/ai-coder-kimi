@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict
 
-APP_NAME = "ai-coder"
+APP_NAME = "ai-coder-kimi"
 CONFIG_DIR = Path.home() / f".config/{APP_NAME}"
 SESSION_FILE = CONFIG_DIR / "session.json"
 DEFAULT_BASE_URL = os.environ.get("AILINUX_BASE_URL", "https://api.ailinux.me")

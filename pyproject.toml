@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "aicoder"
+name = "aicoder-kimi"
 version = "0.9.1"
-description = "Terminalbasierter Coding-Agent für AILinux / TriForce Backend"
+description = "Terminalbasierter Coding-Agent für AILinux / TriForce Backend — Kimi K3 Fork"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [project.scripts]
-aicoder = "aicoder.cli:main"
+aicoder-kimi = "aicoder.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "."}

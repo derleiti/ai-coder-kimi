@@ -4,13 +4,19 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from .config import CONFIG_DIR
+from .kimi import FALLBACK_CANDIDATES
 
 STATE_FILE = CONFIG_DIR / "state.json"
 
 SWARM_MODES = {"off", "auto", "on", "review"}
 TOOL_MODES = {"off", "on_demand", "always"}
 APPROVAL_MODES = {"ask", "autopilot", "sudo_only", "all"}
-DEFAULT_FALLBACK_MODEL = "ollama/llama3.2:latest"
+# Dieser Fork arbeitet ausschließlich mit Kimi K3 — kein Fremd-Modell als
+# Fallback mehr. "" bedeutet "kein Fallback konfiguriert" (siehe migrate
+# unten); der tatsächlich geroutete Modell-String wird beim Setup per
+# kimi.detect_kimi_model() aus dem Backend-Katalog ermittelt.
+DEFAULT_FALLBACK_MODEL = ""
+DEFAULT_KIMI_MODEL = FALLBACK_CANDIDATES[0]
 
 _DEFAULTS: Dict[str, Any] = {
     "selected_model": None,

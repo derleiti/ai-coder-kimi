@@ -235,7 +235,7 @@ def run_setup(force: bool = False) -> bool:
     needs_setup = force or not state.get("selected_model")
 
     print(_c("bold", "\n╔══════════════════════════════════════════╗"))
-    print(_c("bold",   "║        ai-coder  —  AILinux Agent        ║"))
+    print(_c("bold",   "║   ai-coder-kimi — Kimi K3 Edition         ║"))
     print(_c("bold",   "╚══════════════════════════════════════════╝"))
 
     # Session prüfen
@@ -290,47 +290,34 @@ def run_setup(force: bool = False) -> bool:
     if not needs_setup:
         return True
 
-    print("\n── Modell-Konfiguration ───────────────────")
+    print("\n── Modell-Konfiguration (Kimi K3 fest verdrahtet) ──")
 
-    # Verfügbare Modelle laden
-    popular = [
-        "groq/llama-3.3-70b-versatile",
-        "groq/moonshotai/kimi-k2-instruct",
-        "groq/qwen/qwen3-32b",
-        "gemini/gemini-2.0-flash",
-        "gemini/gemini-2.5-pro",
-        "anthropic/claude-sonnet-4",
-        "ollama/qwen3:8b",
-        "mistral/mistral-large-latest",
-        "(andere eingeben)",
-    ]
-    print(_c("dim", "  Tip: aicoder models --group  zeigt alle 625+ Modelle"))
-    print(_c("dim", "  Öffne interaktiven Modell-Picker..."))
-    _picked = model_picker_interactive(current_model=state.get("selected_model") or "")
-    if _picked:
-        model = _picked
-    else:
-        model = "groq/llama-3.3-70b-versatile"  # fallback
+    # Dieser Fork arbeitet ausschließlich mit Kimi K3 (Moonshot AI).
+    # Statt einer freien Provider-Auswahl wird der Backend-Katalog nach dem
+    # passenden Kimi-K3-Eintrag durchsucht (siehe aicoder/kimi.py).
+    from .kimi import detect_kimi_model, is_kimi_model
+    from .client import TriForceClient
+
+    try:
+        client = TriForceClient(session.base_url, token=session.token)
+        model = detect_kimi_model(client)
+        if is_kimi_model(model):
+            print(f"  {_c('dim', 'Backend-Katalog durchsucht →')} {_c('green', model)}")
+        else:
+            print(f"  {_c('yellow', 'Kimi K3 nicht im Backend-Katalog gefunden — verwende Default:')} {model}")
+    except Exception as e:
+        model = detect_kimi_model(None)
+        print(f"  {_c('yellow', f'Katalog nicht erreichbar ({e}) — verwende Default:')} {model}")
 
     set_model(model)
     print(f"  model → {_c('green', model)}")
+    print(_c("dim", "  Andere ID nötig? aicoder model <id>  oder  AICODER_KIMI_MODEL=<id> setzen."))
 
-    print("\n── Fallback-Modell ────────────────────────")
-    fallback_opts = [
-        "groq/moonshotai/kimi-k2-instruct",
-        "groq/llama-3.3-70b-versatile",
-        "groq/qwen/qwen3-32b",
-        "ollama/deepseek-v3.2:cloud",
-        "(keins)",
-        "(andere eingeben)",
-    ]
-    fallback = _pick("Fallback bei Fehler/Timeout:", fallback_opts,
-                     default=state.get("fallback_model") or "groq/moonshotai/kimi-k2-instruct")
-    if fallback == "(andere eingeben)":
-        fallback = _ask("Fallback-ID", "")
-    if fallback and fallback != "(keins)":
-        set_fallback(fallback)
-        print(f"  fallback → {_c('green', fallback)}")
+    # Kein Fremd-Modell als Fallback — dieser Fork bleibt bei Fehlern
+    # bewusst bei Kimi K3 (Retry statt Provider-Wechsel). Wer explizit
+    # einen Fallback will, kann ihn manuell setzen: `aicoder fallback <id>`.
+    if state.get("fallback_model"):
+        print(f"\n  {_c('dim', 'fallback (vorhanden, unverändert) →')} {state.get('fallback_model')}")
 
     print("\n── Swarm-Modus ────────────────────────────")
     swarm_descs = {
@@ -346,6 +333,9 @@ def run_setup(force: bool = False) -> bool:
     if swarm in SWARM_MODES:
         set_swarm(swarm)
         print(f"  swarm → {_c('green', swarm)}")
+        if swarm in ("on", "review") and not get_state().get("fallback_model"):
+            print(_c("yellow", "  Hinweis: swarm=on/review braucht ein Fallback-Modell "
+                                "(aktuell keins gesetzt) → aicoder fallback <id>"))
 
     print("\n── Workspace ──────────────────────────────")
     ws_default = state.get("workspace_root") or str(Path.cwd())
@@ -457,7 +447,7 @@ def run_repl(skip_setup: bool = False) -> int:
         w = max(48, min(term_width(), 92))
         rule = "─" * (w - 4)
         print()
-        print(f"  {C.BOLD}{C.BCYAN}◆ ai-coder{C.RESET}  {C.DIM}interactive agent{C.RESET}")
+        print(f"  {C.BOLD}{C.BCYAN}◆ ai-coder-kimi{C.RESET}  {C.DIM}interactive agent · Kimi K3{C.RESET}")
         print(f"  {C.DIM}{rule}{C.RESET}")
         print(f"  {dim('account  ')} {cyan(identity)}")
         print(f"  {dim('operator ')} {cyan(model or '(backend default)')}")
