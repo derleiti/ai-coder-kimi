@@ -324,7 +324,7 @@ class SettingsWidget(QWidget):
         mode_idx = self.tool_mode_combo.findData(state.get("tool_mode", "on_demand"))
         if mode_idx >= 0:
             self.tool_mode_combo.setCurrentIndex(mode_idx)
-        self.timeout_spin.setValue(int(state.get("request_timeout", 30)))
+        self.timeout_spin.setValue(int(state.get("request_timeout", 90)))
         approval_idx = self.approval_mode_combo.findData(state.get("approval_mode", "ask"))
         if approval_idx >= 0:
             self.approval_mode_combo.setCurrentIndex(approval_idx)

@@ -92,3 +92,36 @@ def is_kimi_model(model_id: Optional[str]) -> bool:
         return False
     low = model_id.lower()
     return any(tok in low for tok in MATCH_TOKENS + LEGACY_MATCH_TOKENS)
+
+
+def ensure_kimi_model(session=None) -> Optional[str]:
+    """Idempotent: falls noch kein Modell gewählt ist, Kimi K3 erkennen und
+    dauerhaft setzen. Gibt das aktive Modell zurück (bestehend oder neu
+    erkannt), sonst None wenn weder state noch Session/Katalog verfügbar
+    sind (z.B. GUI vor dem ersten Login).
+
+    Wichtig: nur der CLI-Setup-Wizard (setup.run_setup) hatte die
+    Kimi-K3-Bindung — die GUI überspringt run_setup() komplett und schickte
+    dadurch model=None an /v1/client/chat ("[chat/default]"), was beim
+    Backend zu sehr langen/hängenden Requests führen kann. Diese Funktion
+    ist der gemeinsame Einstiegspunkt für beide UIs, damit das nicht mehr
+    passieren kann.
+    """
+    from .session_state import get_state, set_model
+
+    state = get_state()
+    existing = state.get("selected_model")
+    if existing:
+        return existing
+
+    client = None
+    if session is not None:
+        try:
+            from .client import TriForceClient
+            client = TriForceClient(session.base_url, token=session.token, timeout=10)
+        except Exception:
+            client = None
+
+    model = detect_kimi_model(client)
+    set_model(model)
+    return model

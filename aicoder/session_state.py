@@ -27,7 +27,10 @@ _DEFAULTS: Dict[str, Any] = {
     # full agent available for actual work.  None means "all discovered tools".
     "tool_mode": "on_demand",
     "enabled_tools": None,
-    "request_timeout": 30,
+    # Kimi K3 läuft laut Herstellerdoku immer mit reasoning_effort=max
+    # (always-on thinking) — 30s (Original-Default) reichen dafür oft
+    # nicht. 90s deckt sich mit den CLI-Defaults für ask/task.
+    "request_timeout": 90,
     # ask: confirm every mutation; autopilot: safe writes only; sudo_only:
     # automatically approve elevated requests after local sudo auth; all: all mutations.
     "approval_mode": "ask",

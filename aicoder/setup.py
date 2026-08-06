@@ -437,7 +437,7 @@ def run_repl(skip_setup: bool = False) -> int:
         ws = state.get("workspace_root") or str(Path.cwd())
         tool_mode = state.get("tool_mode", "on_demand")
         enabled = state.get("enabled_tools")
-        timeout = int(state.get("request_timeout", 30))
+        timeout = int(state.get("request_timeout", 90))
         try:
             session = load_session()
             identity = f"{session.user_id} · {session.tier}"

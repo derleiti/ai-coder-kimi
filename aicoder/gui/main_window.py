@@ -11,9 +11,27 @@ from .settings_widget import SettingsWidget
 from .theme import APP_STYLESHEET
 
 
+def _ensure_kimi_model_silently() -> None:
+    """Modell auf Kimi K3 pinnen, falls noch keins gewählt ist.
+
+    Best-effort: ohne gültige Session (z.B. vor dem ersten Login) oder bei
+    Netzwerkfehlern einfach überspringen — die Chat-Tab zeigt in dem Fall
+    ohnehin den normalen Verbindungsfehler an, nur eben nicht mehr mit
+    model=None ("[chat/default]") gegen einen unbekannten Backend-Default.
+    """
+    try:
+        from ..config import load_session
+        from ..kimi import ensure_kimi_model
+        session = load_session()
+        ensure_kimi_model(session)
+    except Exception:
+        pass
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        _ensure_kimi_model_silently()
         self.tray = None  # wird von app.py gesetzt
         self.setWindowTitle("ai-coder-kimi")
         self.setMinimumSize(QSize(720, 540))
