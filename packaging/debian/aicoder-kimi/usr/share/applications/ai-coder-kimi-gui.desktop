@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ai-coder-kimi GUI
+Comment=AILinux Coding Agent — Kimi K3, MCP-Tools
+Exec=aicoder-kimi gui
+Icon=zypp.gui
+Terminal=false
+Type=Application
+Categories=Development;Utility;
+Keywords=ai;coding;agent;llm;ailinux;kimi;
+StartupNotify=true

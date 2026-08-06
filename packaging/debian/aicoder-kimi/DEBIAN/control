@@ -1,0 +1,17 @@
+Package: aicoder-kimi
+Version: 0.9.1
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libc6 (>= 2.34), pkexec, polkitd, polkit-kde-agent-1
+Maintainer: Markus Leitermann <admin@ailinux.me>
+Homepage: https://github.com/derleiti/ai-coder-kimi
+Description: ai-coder-kimi — Terminal Coding & DevOps Agent (Kimi K3)
+ Fork von ai-coder, fest auf Kimi K3 (Moonshot AI) verdrahtet.
+ Terminalbasierter autonomer Coding-Agent für AILinux / TriForce Backend.
+ Swarm-Support, DevOps-Tools, opencode-Style UI.
+ .
+ Features: ask, chat, task, review, agent (autonomous loop), shell,
+ sudo, sysinfo, service, broadcast, models, history und mehr.
+ .
+ Backend: TriForce / api.ailinux.me · Modell: Kimi K3 (auto-erkannt)

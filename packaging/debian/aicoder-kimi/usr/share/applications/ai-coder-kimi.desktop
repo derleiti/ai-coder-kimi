@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ai-coder-kimi Terminal
+Comment=AILinux Coding Agent (Kimi K3) — Terminal REPL
+Exec=x-terminal-emulator -e aicoder-kimi
+Icon=zypp.gui
+Terminal=true
+Type=Application
+Categories=Development;Utility;
+Keywords=ai;coding;agent;llm;ailinux;kimi;

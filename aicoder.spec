@@ -3,7 +3,7 @@ block_cipher = None
 
 a = Analysis(
     ['aicoder_main.py'],
-    pathex=['/home/zombie/ai-coder'],
+    pathex=['/home/zombie/ai-coder-kimi'],
     binaries=[],
     datas=[],
     hiddenimports=[
@@ -21,6 +21,7 @@ a = Analysis(
         'aicoder.setup',
         'aicoder.repl_input',
         'aicoder.privileges',
+        'aicoder.kimi',
         'aicoder.ui',
         'aicoder.gui',
         'aicoder.gui.app',
@@ -68,7 +69,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='aicoder',
+    name='aicoder-kimi',
     debug=False,
     bootloader_ignore_signals=False,
     strip=True,

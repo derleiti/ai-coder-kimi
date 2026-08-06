@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+echo "aicoder-kimi installed. Run: aicoder-kimi --help"
+echo "First time setup: aicoder-kimi  (no args) — model auto-pins to Kimi K3"

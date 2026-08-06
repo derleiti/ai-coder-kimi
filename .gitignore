@@ -5,12 +5,16 @@ __pycache__/
 .eggs/
 dist/
 build/
-~/.config/ai-coder/
+~/.config/ai-coder-kimi/
 *.log
 .env
--e 
+-e
 *.bak
 *.bak.*
 __pycache__/
 *.pyc
 packaging/*.deb
+# Kompilierte Release-Binaries gehören in GitHub Releases, nicht ins Repo
+# (GitHub warnt/blockt ab 50-100MB, siehe Original-Historie). build.sh legt
+# usr/bin/ selbst per mkdir -p an, kein Platzhalter nötig.
+packaging/debian/aicoder-kimi/usr/bin/
